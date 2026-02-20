@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using myApp.Data;
 using myApp.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace myApp.Controllers
 {
@@ -167,11 +168,14 @@ namespace myApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                var passwordHasher = new PasswordHasher<User>();
                 var user = new User
                 {
                     login = model.Login,
-                    Password = model.Password, 
-                    IdRole = 2 // Роль пользователя
+                    Password = passwordHasher.HashPassword(null, model.Password), // Хэширование пароля перед сохранением в базу данных
+                                                                                  // (Здесь передаётся null вместо user, чтобы не использовать его ID,
+                                                                                  // потому что Метод HashPassword класса PasswordHasher<TUser> требует два параметра) 
+                    IdRole = 2 // Назаначение роли, в данном случае - "Пользователь" 
                 };
 
                 _context.Add(user);
@@ -180,12 +184,6 @@ namespace myApp.Controllers
             }
             return View(model);
         }
-        // GET: Users/Login
-        public IActionResult Login()
-        {
-            return View();
-        }
-
 
         // POST: Users/Login
         [HttpPost]
@@ -195,16 +193,28 @@ namespace myApp.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _context.Users
-                    .FirstOrDefaultAsync(u => u.login == model.Login && u.Password == model.Password);
+                    .FirstOrDefaultAsync(u => u.login == model.Login); // Проверка пользователя по логину
 
                 if (user != null)
                 {
-                    
-                    HttpContext.Session.SetInt32("UserId", user.IDUser); // Установка  сессии
-                    return RedirectToAction(nameof(Index)); // Перенаправление на главную страницу
-                }
+                    var passwordHasher = new PasswordHasher<User>(); // Создаем экземпляр PasswordHasher для проверки пароля
 
-                ModelState.AddModelError("", "Неправильный логин или пароль");
+                    var result = passwordHasher.VerifyHashedPassword(user, user.Password, model.Password); // Проверка хэшированного пароля
+
+                    if (result == PasswordVerificationResult.Success)
+                    {
+                        HttpContext.Session.SetInt32("UserId", user.IDUser); // Установка сессии с ID пользователя, для дальнейшего определения прав
+                        return RedirectToAction(nameof(Index)); // Перенаправление на главную страницу
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Неправильный логин или пароль");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Неправильный логин или пароль");
+                }
             }
             return View(model);
         }
