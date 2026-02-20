@@ -11,8 +11,8 @@ using myApp.Data;
 namespace myApp.Migrations
 {
     [DbContext(typeof(DBConttextApp))]
-    [Migration("20260220075559_124")]
-    partial class _124
+    [Migration("20260220080501_nameMigration")]
+    partial class nameMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,8 +55,7 @@ namespace myApp.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("login")
                         .IsRequired()
