@@ -185,6 +185,11 @@ namespace myApp.Controllers
             return View(model);
         }
 
+        // GET: Users/Login
+        public IActionResult Login()
+        {
+            return View();
+        }
         // POST: Users/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -217,12 +222,6 @@ namespace myApp.Controllers
                 }
             }
             return View(model);
-        }
-
-        // GET: Users/Login
-        public IActionResult Login()
-        {
-            return View();
         }
 
     }
