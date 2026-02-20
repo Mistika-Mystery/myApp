@@ -208,7 +208,8 @@ namespace myApp.Controllers
 
                     if (result == PasswordVerificationResult.Success)
                     {
-                        HttpContext.Session.SetInt32("UserId", user.IDUser); // Установка сессии с ID пользователя, для дальнейшего определения прав
+                        UserSession.UserId = user.IDUser;// Сохраняем идентификатор в переменную
+                        UserSession.RoleId = user.IdRole; // Сохраняем роль в переменную
                         return RedirectToAction(nameof(Index)); // Перенаправление на главную страницу
                     }
                     else
