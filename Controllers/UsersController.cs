@@ -219,6 +219,12 @@ namespace myApp.Controllers
             return View(model);
         }
 
+        // GET: Users/Login
+        public IActionResult Login()
+        {
+            return View();
+        }
+
     }
 
 }

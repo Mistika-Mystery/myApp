@@ -5,7 +5,7 @@
 namespace myApp.Migrations
 {
     /// <inheritdoc />
-    public partial class uy : Migration
+    public partial class _124 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

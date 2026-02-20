@@ -11,8 +11,8 @@ using myApp.Data;
 namespace myApp.Migrations
 {
     [DbContext(typeof(DBConttextApp))]
-    [Migration("20260220065942_uy")]
-    partial class uy
+    [Migration("20260220075559_124")]
+    partial class _124
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
