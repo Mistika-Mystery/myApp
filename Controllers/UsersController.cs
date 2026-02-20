@@ -153,5 +153,33 @@ namespace myApp.Controllers
         {
             return _context.Users.Any(e => e.IDUser == id);
         }
+
+        // GET: Users/Register
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        // POST: Users/Register
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new User
+                {
+                    login = model.Login,
+                    Password = model.Password, 
+                    IdRole = 2 // Роль пользователя
+                };
+
+                _context.Add(user);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
+
     }
 }
