@@ -180,6 +180,35 @@ namespace myApp.Controllers
             }
             return View(model);
         }
+        // GET: Users/Login
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+
+        // POST: Users/Login
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(u => u.login == model.Login && u.Password == model.Password);
+
+                if (user != null)
+                {
+                    
+                    HttpContext.Session.SetInt32("UserId", user.IDUser); // Установка  сессии
+                    return RedirectToAction(nameof(Index)); // Перенаправление на главную страницу
+                }
+
+                ModelState.AddModelError("", "Неправильный логин или пароль");
+            }
+            return View(model);
+        }
 
     }
+
 }
