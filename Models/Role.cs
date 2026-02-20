@@ -8,9 +8,9 @@ namespace myApp.Models
         public int IDRole { get; set; }
         [Required]
         [StringLength(50)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
-        public ICollection<User> Users { get; set; }
+        public ICollection<User>? Users { get; set; }
 
         
     }

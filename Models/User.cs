@@ -14,8 +14,9 @@ namespace myApp.Models
         [Required]
         [StringLength(50)]
         public string Password { get; set; }
-        [ForeignKey("IdRole")]
+        
         public int IdRole { get; set; }
+        [ForeignKey("IdRole")]
 
         public Role? Role { get; set; }
     }
